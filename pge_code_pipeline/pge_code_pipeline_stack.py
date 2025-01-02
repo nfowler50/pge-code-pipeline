@@ -12,6 +12,18 @@ from aws_cdk import (
 from constructs import Construct
 
 class PgeCodePipelineStack(Stack):
+    '''
+    PgeCodePipelineStack defines infrastrucutre for a simple 5 stage CI/CD pipeline.
+    
+    Pipeline resources defined here are as follows:
+        - CodeBuild Role -> IAM role that can be assumed by the CodeBuild containers during testing and deployment
+        - artifact s3 bucket -> storage location for deployment artifacts
+        - CodePipeline pipeline -> orchestrating resource for all pipeline stages
+        - CodeBuild "Build Project" stage -> creates CodeBuild container to run python unit tests
+        - Code Build "Deploy to Beta" stage -> creates CodeBuild container that generates beta environment template and deploys resource
+        - Approval Action -> pipeline stage bthat pauses deployment until manual approval has been granted
+        - Code Build "Deploy to Prod" stage -> creates CodeBuild container that generates prod environment template and deploys resource
+    '''
 
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
@@ -43,7 +55,8 @@ class PgeCodePipelineStack(Stack):
 
         # **** 2. Retrieve GitHub credentials from Secrets Manager ****
         # ASSESSOR MUST PROVIDE THEIR OWN OAUTH TOKEN FOR GITHUB ACCESS. Only permission needed is repo: public_repo
-        github_token = aws_secretsmanager.Secret.from_secret_complete_arn(self, 'GitHubToken', 'arn:aws:secretsmanager:us-east-1:975050280026:secret:github-access-token-secret-DLykZ5')
+        # Github OAuth token can be pasted in here
+        github_token = aws_secretsmanager.Secret.from_secret_complete_arn(self, 'GitHubToken', 'arn:aws:secretsmanager:us-west-2:975050280026:secret:github-access-token-secret-ZNcmas')
 
         # GitHub repository details
         repository = "pge-assessment-application"

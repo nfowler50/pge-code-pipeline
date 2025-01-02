@@ -74,10 +74,10 @@ class PgeCodePipelineStack(Stack):
                     "pre_build": {
                         "commands": [
                             "cd lambda-hosted",
-                            "pytest test-model_serve.py",
+                            "pytest test-linear_regress_model_handler.py",
                             "cd ..",
                             "cd ecs-hosted",
-                            "pytest test-model_serve.py",
+                            "pytest test-linear_regress_model_handler.py",
                             "cd ..",
                             "cd lambda-auth",
                             "pytest test-auth.py",
